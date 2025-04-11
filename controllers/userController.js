@@ -2,15 +2,18 @@ const User = require('../models/User');
 
 exports.saveUserData = async (req, res) => {
   try {
-    const { fullName, phoneNumber, uniqueid } = req.body;
+    // Destructure the new "reason" field along with other fields from the request body
+    const { fullName, phoneNumber, reason, uniqueid } = req.body;
     let user = await User.findOne({ uniqueid });
 
     if (user) {
-      user.entries.push({ fullName, phoneNumber });
+      // Push a new entry that now includes the reason
+      user.entries.push({ fullName, phoneNumber, reason });
     } else {
+      // Create a new user document with the reason field in the entry
       user = new User({
         uniqueid,
-        entries: [{ fullName, phoneNumber }]
+        entries: [{ fullName, phoneNumber, reason }]
       });
     }
 
